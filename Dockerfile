@@ -21,7 +21,7 @@ COPY --from=sonar-scanner /opt/sonar-scanner/lib /opt/sonar-scanner/lib
 
 # Install trivy
 COPY --from=trivy /usr/local/bin/trivy /usr/bin/trivy
-COPY --from=trivy contrib/*.tpl contrib/
+COPY --from=trivy /contrib/*.tpl contrib/
 
 # Install base packages
 RUN set -eux; \
