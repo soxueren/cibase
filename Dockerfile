@@ -1,4 +1,5 @@
 FROM gcr.io/kaniko-project/executor:v1.3.0 AS kaniko
+FROM sonarsource/sonar-scanner-cli:latest AS sonar-scanner
 FROM maven:3-jdk-8-alpine
 
 ENV SONAR_SCANNER_HOME="/opt/sonar-scanner" \
@@ -13,9 +14,10 @@ ENV TZ="Asia/Shanghai" \
 
 # Install kaniko sonar-scanner-cli
 COPY --from=kaniko /kaniko/executor /usr/bin/kaniko
-COPY sonar-scanner/bin /opt/sonar-scanner/bin
-COPY sonar-scanner/conf /opt/sonar-scanner/conf
-COPY sonar-scanner/lib /opt/sonar-scanner/lib
+COPY --from=sonar-scanner /opt/sonar-scanner/bin /opt/sonar-scanner/bin
+COPY --from=sonar-scanner /opt/sonar-scanner/conf /opt/sonar-scanner/conf
+COPY --from=sonar-scanner /opt/sonar-scanner/lib /opt/sonar-scanner/lib
+
 
 # Install base packages
 RUN set -eux; \
